@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register as Donor - Raktamitra</title>
+  <link rel="stylesheet" href="register.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h2>Register as Donor</h2>
+  <form id="registerForm" autocomplete="off">
+    <label for="name">Full Name *</label>
+    <input type="text" id="name" name="name" required placeholder="Your full name" />
+
+    <label for="mobile">Mobile Number *</label>
+    <div class="mobile-wrapper">
+      <span class="mobile-prefix">+91</span>
+      <input
+        type="text"
+        id="mobile"
+        name="mobile"
+        maxlength="10"
+        placeholder="10 digit mobile number"
+        required
+        class="mobile-input"
+        pattern="[0-9]{10}"
+        inputmode="numeric"
+      />
+    </div>
+
+    <label for="bloodGroup">Blood Group *</label>
+    <select id="bloodGroup" name="bloodGroup" required>
+      <option value="" disabled selected>Select blood group</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <div id="otherBloodGroupDiv">
+      <label for="otherBloodGroup">Please specify blood group</label>
+      <input type="text" id="otherBloodGroup" name="otherBloodGroup" maxlength="3" placeholder="E.g. A1+" />
+    </div>
+
+    <label for="city">City *</label>
+    <input type="text" id="city" name="city" required placeholder="Your city" />
+
+    <label for="dob">Date of Birth *</label>
+    <input type="date" id="dob" name="dob" required max="" min="1900-01-01" placeholder="YYYY-MM-DD" />
+
+    <label for="lastDonated">Last Donation Date</label>
+    <input type="date" id="lastDonated" name="lastDonated" max="" min="1900-01-01" placeholder="YYYY-MM-DD" />
+
+    <label>Are you an Ashayam Family Member? *</label>
+    <div class="radio-group">
+      <input type="radio" id="volunteerYes" name="volunteer" value="yes" required />
+      <label for="volunteerYes">Yes</label>
+
+      <input type="radio" id="volunteerNo" name="volunteer" value="no" />
+      <label for="volunteerNo">No</label>
+    </div>
+
+    <div id="membershipIdDiv">
+      <label for="membershipId">Membership ID (starts with ASYM) *</label>
+      <div id="membershipIdWrapper">
+        <span id="membershipPrefix">ASYM</span>
+        <input type="text" id="membershipId" name="membershipId" maxlength="11" placeholder="Enter membership number" pattern="\d*" inputmode="numeric" />
+      </div>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script src="register.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Donor Chat - Raktamitra</title>
+  <link rel="stylesheet" href="donor-chat.css" />
+</head>
+<body>
+
+  <h2>Donor Login</h2>
+  <div id="loginSection">
+    <input type="text" id="donorIdInput" placeholder="Enter your Donor ID" />
+    <button id="loginBtn">Login</button>
+  </div>
+
+  <div id="chatSection" style="display:none;">
+    <h3>Your Chats</h3>
+    <div id="chatList"></div>
+
+    <div id="chatWindow" style="display:none;">
+      <h4 id="chatWith"></h4>
+      <div id="messages"></div>
+      <div id="typingIndicator"></div>
+
+      <form id="chatForm">
+        <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="donor-chat.js"></script>
+
+</body>
+</html>

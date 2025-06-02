@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat with Donor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      padding: 0;
+      margin: 0;
+    }
+    .chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+    .chat-header small {
+      display: block;
+      font-size: 0.9em;
+    }
+    .chat-box {
+      height: 70vh;
+      overflow-y: scroll;
+      padding: 1em;
+      background: white;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+    .user {
+      background-color: #d1ecf1;
+      margin-left: auto;
+    }
+    .donor {
+      background-color: #f8d7da;
+      margin-right: auto;
+    }
+    .input-area {
+      display: flex;
+      padding: 1em;
+      background-color: #fff;
+      border-top: 1px solid #ccc;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+    }
+    .input-area button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-header" id="donorHeader">
+  Chat with Donor
+  <small>Loading donor info...</small>
+</div>
+
+<div class="chat-box" id="chatBox"></div>
+
+<div class="input-area">
+  <input type="text" id="chatInput" placeholder="Type your message...">
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZ4e3ewMyVkUJFbLZyRb1SH37cakFwMiQ",
+  authDomain: "raktamitra-4c4ee.firebaseapp.com",
+  projectId: "raktamitra-4c4ee",
+  storageBucket: "raktamitra-4c4ee.firebasestorage.app",
+  messagingSenderId: "997339508669",
+  appId: "1:997339508669:web:399ae9f6b7bf8e4e83acd4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const donorId = urlParams.get("donor");
+
+  const donorHeader = document.getElementById("donorHeader");
+  const chatBox = document.getElementById("chatBox");
+
+  async function loadDonorDetails() {
+    const donorDoc = await getDoc(doc(db, "donors", donorId));
+    if (donorDoc.exists()) {
+      const data = donorDoc.data();
+      donorHeader.innerHTML = `
+        Chat with ${data.name}
+        <small>DOB: ${data.dob} | Last Donated: ${data.lastDonated}</small>
+      `;
+    } else {
+      donorHeader.innerText = "Donor not found";
+    }
+  }
+
+  loadDonorDetails();
+
+  // Live message loading
+  const messagesRef = collection(db, "chats", donorId, "messages");
+  const q = query(messagesRef, orderBy("timestamp"));
+  onSnapshot(q, snapshot => {
+    chatBox.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const msg = document.createElement("div");
+      msg.className = "message " + (data.sender === "user" ? "user" : "donor");
+      msg.textContent = data.text;
+      chatBox.appendChild(msg);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  window.sendMessage = async function () {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (text === "") return;
+
+    await addDoc(messagesRef, {
+      text,
+      sender: "user",
+      timestamp: serverTimestamp()
+    });
+
+    input.value = "";
+  }
+</script>
+
+</body>
+</html>
